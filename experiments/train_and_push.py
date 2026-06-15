@@ -8,6 +8,13 @@ from sklearn.metrics import accuracy_score, log_loss
 from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 from dotenv import load_dotenv
 
+import logging
+import warnings
+
+warnings.filterwarnings("ignore")
+for logger_name in ["mlflow", "mlflow.sklearn", "mlflow.models.model"]:
+    logging.getLogger(logger_name).setLevel(logging.ERROR)
+
 # Завантажуємо змінні з .env файлу
 load_dotenv()
 
@@ -48,7 +55,7 @@ for params in param_grid:
         mlflow.log_params(params)
 
         # C - це обернений learning_rate в LogisticRegression
-        model = LogisticRegression(C=params["learning_rate"], max_iter=params["epochs"], solver='lbfgs', multi_class='multinomial')
+        model = LogisticRegression(C=params["learning_rate"], max_iter=params["epochs"], solver='lbfgs')
         model.fit(X_train, y_train)
 
         # Прогнозування та метрики
