@@ -14,10 +14,10 @@ spec:
     targetRevision: "*"
     helm:
       values: |
-        serviceMonitor:
-          enabled: true
-          additionalLabels:
-            release: prometheus-operator
+        fullnameOverride: pushgateway
+        service:
+          type: ClusterIP
+          port: 9091
   syncPolicy:
     automated:
       prune: true
